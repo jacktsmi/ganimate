@@ -5,35 +5,44 @@ import torch.nn.functional as F
 class Generator(nn.Module):
     def __init__(self):
         super(Generator, self).__init__()
-        # Encoder
-        self.enc1 = nn.InstanceNorm2d(F.relu(nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=1), inplace=True))
-        self.enc2 = nn.InstanceNorm2d(F.relu(nn.Conv2d(in_channels=32, out_channels=128, kernel_size=3, stride=2), inplace=True))
-        self.enc3 = nn.InstanceNorm2d(F.relu(nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2), inplace=True))
-        # Transformer (Residual Blocks)
-        self.res1 = ResidualBlock()
-        self.res2 = ResidualBlock()
-        self.res3 = ResidualBlock()
-        self.res4 = ResidualBlock()
-        self.res5 = ResidualBlock()
-        self.res6 = ResidualBlock()
-        # Decoder
-        self.dec1 = nn.InstanceNorm2d(F.relu(nn.Conv2d(in_channels=256, out_channels=128, kernel_size=3, stride=2), inplace=True))
-        self.dec2 = nn.InstanceNorm2d(F.relu(nn.Conv2d(in_channels=128, out_channels=64, kernel_size=3, stride=2), inplace=True))
-        self.dec3 = nn.InstanceNorm2d(F.relu(nn.Conv2d(in_channels=64, out_channels=3, kernel_size=7, stride=1), inplace=True))
+        self.main = nn.Sequential(
+            # Encoder
+            nn.Conv2d(3, 64, kernel_size=7, stride=1,),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(inplace=True),
+
+            nn.Conv2d(64, 128, kernel_size=3, stride=2),
+            nn.InstanceNorm2d(128),
+            nn.ReLU(inplace=True),
+
+            nn.Conv2d(128, 256, kernel_size=3, stride=2),
+            nn.InstanceNorm2d(256),
+            nn.ReLU(inplace=True),
+
+            # Transformer (Residual Blocks)
+            ResidualBlock(),
+            ResidualBlock(),
+            ResidualBlock(),
+            ResidualBlock(),
+            ResidualBlock(),
+            ResidualBlock(),
+
+            # Decoder
+            nn.Conv2d(256, 128, kernel_size=3, stride=2,),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(inplace=True),
+
+            nn.Conv2d(128, 64, kernel_size=3, stride=2),
+            nn.InstanceNorm2d(128),
+            nn.ReLU(inplace=True),
+
+            nn.Conv2d(64, 3, kernel_size=7, stride=1),
+            nn.InstanceNorm2d(256),
+            nn.ReLU(inplace=True),
+        )
     
     def forward(self, x):
-        out = self.enc1(x)
-        out = self.enc2(out)
-        out = self.enc3(out)
-        out = self.res1(out)
-        out = self.res2(out)
-        out = self.res3(out)
-        out = self.res4(out)
-        out = self.res5(out)
-        out = self.res6(out)
-        out = self.dec1(out)
-        out = self.dec2(out)
-        out = self.dec3(out)
+        out = self.main(x)
 
         return out
 

@@ -7,15 +7,15 @@ class Generator(nn.Module):
         super(Generator, self).__init__()
         self.main = nn.Sequential(
             # Encoder
-            nn.Conv2d(3, 64, kernel_size=7, stride=1,),
+            nn.Conv2d(3, 64, kernel_size=(7, 7), stride=1,),
             nn.InstanceNorm2d(64),
             nn.ReLU(inplace=True),
 
-            nn.Conv2d(64, 128, kernel_size=3, stride=2),
+            nn.Conv2d(64, 128, kernel_size=(3, 3), stride=2),
             nn.InstanceNorm2d(128),
             nn.ReLU(inplace=True),
 
-            nn.Conv2d(128, 256, kernel_size=3, stride=2),
+            nn.Conv2d(128, 256, kernel_size=(3, 3), stride=2),
             nn.InstanceNorm2d(256),
             nn.ReLU(inplace=True),
 
@@ -28,15 +28,15 @@ class Generator(nn.Module):
             ResidualBlock(),
 
             # Decoder
-            nn.Conv2d(256, 128, kernel_size=3, stride=2,),
+            nn.Conv2d(256, 128, kernel_size=(3, 3), stride=2,),
             nn.InstanceNorm2d(64),
             nn.ReLU(inplace=True),
 
-            nn.Conv2d(128, 64, kernel_size=3, stride=2),
+            nn.Conv2d(128, 64, kernel_size=(3, 3), stride=2),
             nn.InstanceNorm2d(128),
             nn.ReLU(inplace=True),
 
-            nn.Conv2d(64, 3, kernel_size=7, stride=1),
+            nn.Conv2d(64, 3, kernel_size=(7, 7), stride=1),
             nn.InstanceNorm2d(256),
             nn.ReLU(inplace=True),
         )
@@ -44,6 +44,32 @@ class Generator(nn.Module):
     def forward(self, x):
         out = self.main(x)
 
+        return out
+
+class Discriminator(nn.Module):
+    def __init__(self):
+        self.main = nn.Sequential(
+                        nn.Conv2d(3, 64, kernel_size=(4, 4), stride=2),
+                        nn.InstanceNorm2d(64),
+                        nn.LeakyReLU(negative_slope = 0.2),
+                        
+                        nn.Conv2d(64, 128, kernel_size=(4, 4), stride=2),
+                        nn.InstanceNorm2d(128),
+                        nn.LeakyReLU(negative_slope = 0.2),
+
+                        nn.Conv2d(128, 256, kernel_size=(4, 4), stride=2),
+                        nn.InstanceNorm2d(256),
+                        nn.LeakyReLU(negative_slope = 0.2),
+
+                        nn.Conv2d(256, 512, kernel_size=(4, 4), stride=2),
+                        nn.InstanceNorm2d(512),
+                        nn.LeakyReLU(negative_slope = 0.2),
+
+                        nn.Conv2d(512, 1, kernel_size=(4, 4), stride=1),
+                        nn.Sigmoid()
+                    )
+    def forward(self, x):
+        out = self.main(x)
         return out
 
 class ResidualBlock(nn.Module):

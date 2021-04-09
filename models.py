@@ -86,3 +86,23 @@ class ResidualBlock(nn.Module):
         out = out.view(out.size(0), -1)
 
         return out
+
+# Initialize the weights of the generator
+def weight_init_g(layer):
+    if type(layer) == nn.ConvTranspose2d:
+        nn.init.normal_(layer.weight.data, 0.0, 0.02)
+    elif type(layer) == nn.BatchNorm2d:
+        nn.init.normal_(layer.weight.data, 1.0, 0.02)
+        nn.init.constant_(layer.bias.data, 0.0)
+    # end if
+# end weight_init_generator
+
+# Initialize the weights of the discriminator
+def weight_init_d(layer):
+    if type(layer) == nn.Conv2d:
+        nn.init.normal_(layer.weight.data, 0.0, 0.02)
+    elif type(layer) == nn.BatchNorm2d:
+        nn.init.normal_(layer.weight.data, 1.0, 0.02)
+        nn.init.constant_(layer.bias.data, 0.0)
+    # end if
+# end weight_init_generator

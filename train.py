@@ -18,6 +18,21 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 from torchsummary import summary
+import wget
+import zipfile
+
+# Download data
+# dataA_url = 'https://www.dropbox.com/s/l8ltecy8qonzbcc/dataA.zip?dl=1' # Human faces
+# wget.download(dataA_url, out='./dataA.zip')
+
+# dataB_url = 'https://www.dropbox.com/s/oa6dm9a2y7ymmdx/bitmoji.zip?dl=1' # Cartoon faces
+# wget.download(dataB_url, out='./dataB.zip')
+
+# with zipfile.ZipFile('dataA.zip', 'r') as zip_ref:
+#     zip_ref.extractall('dataA')
+
+# with zipfile.ZipFile('dataB.zip', 'r') as zip_ref2:
+#     zip_ref2.extractall('dataB')
 
 # Learning Parameters
 batch_size = 1 # From CyclGAN paper

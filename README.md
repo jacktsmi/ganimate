@@ -12,4 +12,4 @@ CycleGAN implementation which allows image-to-image translation between human fa
 **TODO :** add file for testing pre-existing weights.
 
 # Results
-I will summarize my results here, for a more detailed analysis of my training process, see 
+I will summarize my results here, for a more detailed analysis of my training process, see [here](./Ganimate_Presentation.pdf)
